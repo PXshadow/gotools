@@ -215,7 +215,7 @@ func importName(iprog *loader.Program, info *loader.PackageInfo, fromPath, fromN
 	return nil
 }
 
-func Main(ctxt *build.Context, offsetFlag, fromFlag, to string) error {
+func Main(ctxt *build.Context, offsetFlag, fromFlag, to string, allowGlobal bool) error {
 	// -- Parse the -from or -offset specifier ----------------------------
 
 	if (offsetFlag == "") == (fromFlag == "") {
@@ -260,7 +260,7 @@ func Main(ctxt *build.Context, offsetFlag, fromFlag, to string) error {
 
 	// -- Load a larger program, for global renamings ---------------------
 
-	if requiresGlobalRename(fromObjects, to) {
+	if requiresGlobalRename(fromObjects, to) && allowGlobal {
 		// For a local refactoring, we needn't load more
 		// packages, but if the renaming affects the package's
 		// API, we we must load all packages that depend on the
