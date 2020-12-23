@@ -1,6 +1,6 @@
 module github.com/pxshadow/gotools
 
-go 1.12
+go 1.15
 
 require (
 	github.com/yuin/goldmark v1.2.1
