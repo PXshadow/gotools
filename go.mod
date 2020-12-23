@@ -1,4 +1,4 @@
-module github.com/pxshadow/gotools
+module github.com/PXshadow/gotools
 
 go 1.12
 
