@@ -94,7 +94,6 @@ func parseFromFlag(ctxt *build.Context, fromFlag string) (*spec, error) {
 		if !buildutil.FileExists(ctxt, spec.filename) {
 			return nil, fmt.Errorf("no such file: %s", spec.filename)
 		}
-
 		bp, err := buildutil.ContainingPackage(ctxt, wd, spec.filename)
 		if err != nil {
 			return nil, err
@@ -114,7 +113,6 @@ func parseFromFlag(ctxt *build.Context, fromFlag string) (*spec, error) {
 	if spec.searchFor != "" {
 		spec.fromName = spec.searchFor
 	}
-
 	cwd, err := os.Getwd()
 	if err != nil {
 		return nil, err
@@ -142,8 +140,9 @@ func parseFromFlag(ctxt *build.Context, fromFlag string) (*spec, error) {
 // object specification.
 func parseObjectSpec(spec *spec, main string) error {
 	// Parse main as a Go expression, albeit a strange one.
+	fmt.Println("main",main)
 	e, _ := parser.ParseExpr(main)
-
+	
 	if pkg := parseImportPath(e); pkg != "" {
 		// e.g. bytes or "encoding/json": a package
 		spec.pkg = pkg
@@ -217,7 +216,6 @@ func parseOffsetFlag(ctxt *build.Context, offsetFlag string) (*spec, error) {
 	if !buildutil.FileExists(ctxt, spec.filename) {
 		return nil, fmt.Errorf("no such file: %s", spec.filename)
 	}
-
 	bp, err := buildutil.ContainingPackage(ctxt, wd, spec.filename)
 	if err != nil {
 		return nil, err
