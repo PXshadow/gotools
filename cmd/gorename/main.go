@@ -15,7 +15,7 @@ import (
 	"os"
 
 	"golang.org/x/tools/go/buildutil"
-	"golang.org/x/tools/refactor/rename"
+	"github.com/pxshadow/gotools/refactor/rename"
 )
 
 var (
@@ -34,6 +34,8 @@ func init() {
 }
 
 func main() {
+	rename.Test()
+	return
 	log.SetPrefix("gorename: ")
 	log.SetFlags(0)
 	flag.Parse()
@@ -46,7 +48,7 @@ func main() {
 		return
 	}
 
-	if err := rename.Main(&build.Default, *offsetFlag, *fromFlag, *toFlag); err != nil {
+	if err := rename.Main(&build.Default, *offsetFlag, *fromFlag, *toFlag,true); err != nil {
 		if err != rename.ConflictError {
 			log.Fatal(err)
 		}

@@ -29,6 +29,7 @@ import (
 	"strings"
 
 	"golang.org/x/tools/go/loader"
+	"golang.org/x/tools/go/packages"
 	"golang.org/x/tools/go/types/typeutil"
 	"golang.org/x/tools/refactor/importgraph"
 	"golang.org/x/tools/refactor/satisfy"
@@ -214,10 +215,26 @@ func importName(iprog *loader.Program, info *loader.PackageInfo, fromPath, fromN
 	}
 	return nil
 }
+func Test() {
+	var cfg = &packages.Config{Mode: packages.LoadAllSyntax, Tests: false}
+	initial,err := packages.Load(cfg,"./test")
+	if err != nil {
+		panic(err)
+	}
+	_ = initial
+	pkg := initial[0]
+	if err := Main(&build.Default,"",`"` + pkg.PkgPath + `".Data.X`,"Test2",false); err != nil {
+		if err != ConflictError {
+			log.Fatal(err)
+		}
+		os.Exit(1)
+	}
+	fmt.Println("file:",pkg.GoFiles)
+	_ = pkg
+}
 
 func Main(ctxt *build.Context, offsetFlag, fromFlag, to string, allowGlobal bool) error {
 	// -- Parse the -from or -offset specifier ----------------------------
-
 	if (offsetFlag == "") == (fromFlag == "") {
 		return fmt.Errorf("exactly one of the -from and -offset flags must be specified")
 	}
@@ -392,16 +409,16 @@ func loadProgram(ctxt *build.Context, pkgs map[string]bool) (*loader.Program, er
 	conf.AllowErrors = true
 	prog, err := conf.Load()
 	if err != nil {
-		return nil, err
+		//return nil, err
 	}
 
 	var errpkgs []string
 	// Report hard errors in indirectly imported packages.
-	for _, info := range prog.AllPackages {
+	/*for _, info := range prog.AllPackages {
 		if containsHardErrors(info.Errors) {
 			errpkgs = append(errpkgs, info.Pkg.Path())
 		}
-	}
+	}*/
 	if errpkgs != nil {
 		var more string
 		if len(errpkgs) > 3 {
