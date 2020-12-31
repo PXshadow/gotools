@@ -361,5 +361,7 @@ func sameLine(fset *token.FileSet, x, y token.Pos) bool {
 }
 
 var moveDirectory = func(from, to string) error {
+	fmt.Println("move directory from:",from,"to:",to)
 	return os.Rename(from, to)
+	
 }
